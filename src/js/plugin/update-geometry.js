@@ -16,6 +16,15 @@ function getThumbSize(i, thumbSize) {
   return thumbSize;
 }
 
+function getBorderSize(element) {
+  return {
+    top: _.toInt(dom.css(element, 'borderTopWidth')),
+    bottom: _.toInt(dom.css(element, 'borderBottomWidth')),
+    left: _.toInt(dom.css(element, 'borderLeftWidth')),
+    right: _.toInt(dom.css(element, 'borderRightWidth'))
+  };
+}
+
 function updateCss(element, i) {
   var xRailOffset = {width: i.railXWidth};
   if (i.isRtl) {
@@ -57,6 +66,15 @@ module.exports = function (element) {
   i.containerHeight = element.clientHeight;
   i.contentWidth = element.scrollWidth;
   i.contentHeight = element.scrollHeight;
+
+  // NOTE: in border-box model, the scroll width or height contains
+  // border of box which isn't belong to content
+  var isBorderBox = dom.css(element, 'boxSizing') === 'border-box';
+  if (isBorderBox) {
+    var border = getBorderSize(element);
+    i.contentWidth -= border.left + border.right;
+    i.contentHeight -= border.top + border.bottom;
+  }
 
   var existingRails;
   if (!element.contains(i.scrollbarXRail)) {

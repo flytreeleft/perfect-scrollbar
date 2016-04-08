@@ -8,8 +8,8 @@ var toInt = exports.toInt = function (x) {
 };
 
 var clone = exports.clone = function (obj) {
-  if (obj === null) {
-    return null;
+  if (obj === null || typeof obj === 'undefined') {
+    return obj;
   } else if (obj.constructor === Array) {
     return obj.map(clone);
   } else if (typeof obj === 'object') {
