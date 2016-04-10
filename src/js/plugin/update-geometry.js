@@ -16,6 +16,10 @@ function getThumbSize(i, thumbSize) {
   return thumbSize;
 }
 
+function isBorderBox(element) {
+  return dom.css(element, 'boxSizing') === 'border-box';
+}
+
 function getBorderSize(element) {
   return {
     top: _.toInt(dom.css(element, 'borderTopWidth')),
@@ -69,8 +73,7 @@ module.exports = function (element) {
 
   // NOTE: in border-box model, the scroll width or height contains
   // border of box which isn't belong to content
-  var isBorderBox = dom.css(element, 'boxSizing') === 'border-box';
-  if (isBorderBox) {
+  if (isBorderBox(element)) {
     var border = getBorderSize(element);
     i.contentWidth -= border.left + border.right;
     i.contentHeight -= border.top + border.bottom;
